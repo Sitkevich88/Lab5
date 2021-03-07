@@ -12,7 +12,7 @@ public class CountGreaterThanBestAlbum {
 
     /**
      * Executes the command.
-     * @param collection - examinable collection
+     * @param collection - collection to be examined
      * @param albumName - the name of an album we compare albums in collection with
      */
 

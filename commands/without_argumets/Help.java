@@ -7,22 +7,6 @@ import java.util.ArrayList;
  */
 
 public class Help{
-    /*
-    /**
-     * Tabulates.
-     * @param number - length of tabulation symbols string
-     * @return String of tabulation symbols
-     */
-
-    /*private String umber){
-        String str = "";
-        try {
-            for (int i = 0; i<number; i++){
-                str+="\t-";
-            }
-        }catch (Exception e){}
-        return str;
-    }*/
 
 
     public Help(){

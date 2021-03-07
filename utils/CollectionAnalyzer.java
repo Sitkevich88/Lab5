@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Collection Analyzer. Deals with initialization date and max id search
+ * Collection Analyzer. Deals with last initialization date and max id search
  */
 
 public class CollectionAnalyzer {
@@ -13,7 +13,7 @@ public class CollectionAnalyzer {
     private Collection<MusicBand> collection;
 
     /**
-     * Loads collection to the class
+     * Loads collection to this class
      * @param collection - collection to be examined
      */
     public CollectionAnalyzer(Collection<MusicBand> collection){
@@ -35,7 +35,7 @@ public class CollectionAnalyzer {
     }
 
     /**
-     * Initialization tracker. Traces initialization date
+     * Initialization tracker. Traces last initialization date
      */
 
     public static class InitializationTracker {
@@ -63,8 +63,8 @@ public class CollectionAnalyzer {
      *
      * @return Date last initialization
      */
-
+    /*
     public Date getLastInitialization(){
         return InitializationTracker.getLastInit();
-    }
+    }*/
 }

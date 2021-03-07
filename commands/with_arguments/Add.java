@@ -6,7 +6,7 @@ import utils.BandCreator;
 import java.util.Collection;
 
 /**
- * Command 'add'. Adds a new element to collection.
+ * Command 'add'. Adds a new element to the collection.
  */
 
 public class Add {
