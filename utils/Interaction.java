@@ -1,8 +1,8 @@
 package utils;
 
 
-import commands.with_arguments.*;
-import commands.without_argumets.*;
+import commands.with_two_arguments.*;
+import commands.with_max_one_argument.*;
 import data.MusicBand;
 import java.util.Collection;
 
@@ -27,14 +27,16 @@ public class Interaction {
     public void run() {
 
         while (true){
-            String[] str = CommandsParser.parseArguments();
+            //String[] str = CommandsParser.parseArguments();
+            String line = CommandsParser.parseLine();
 
-            switch (str[0]){
+            switch (line){
                 case("help"):
                     new Help();
                     break;
                 case("info"):
-                    new Info(collection);
+                    Info info = new Info();
+                    info.invoke(collection);
                     break;
                 case("show"):
                     new Show(collection);
@@ -43,20 +45,6 @@ public class Interaction {
                     Add adder = new Add();
                     collection = adder.updateCollection((Collection<MusicBand>) collection);
                     break;
-                case("update"):
-                    try {
-                        long id = Long.valueOf(str[1]).longValue();
-                        UpdateId updater = new UpdateId();
-                        collection = updater.invoke(collection, id);
-                    }catch (Exception e){}
-                    break;
-                case ("remove_by_id"):
-                    try {
-                        long id = Long.valueOf(str[1]).longValue();
-                        RemoveById remover = new RemoveById();
-                        collection = remover.invoke(collection, id);
-                    }catch (Exception e){}
-                    break;
                 case("clear"):
                     Clear clearer = new Clear();
                     collection = (Collection<MusicBand>) clearer.invoke(collection);
@@ -64,30 +52,8 @@ public class Interaction {
                 case("save"):
                     new Save(collection, collectionSaver);
                     break;
-                case("execute_script"):
-                    try {
-                        ExecuteScript executor = new ExecuteScript(str[1]);
-                        executor.execute(this);
-                    }catch (Exception e){}
-                    break;
                 case("exit"):
                     new Exit();
-                case ("insert_at"):
-                    try {
-                        int index = Integer.valueOf(str[1]).intValue();
-                        InsertAt insertAt = new InsertAt();
-                        collection = insertAt.invoke(collection, index);
-                    }catch (Exception e){
-                        //
-                    }
-                    break;
-                case ("remove_greater"):
-                    try {
-                        int index = Integer.valueOf(str[1]).intValue();
-                        RemoveGreater removeGreater = new RemoveGreater();
-                        collection = removeGreater.invoke(collection, index);
-                    }catch (Exception e){ }
-                    break;
                 case ("sort"):
                     Sort sorter = new Sort();
                     collection = sorter.invoke(collection);
@@ -96,16 +62,51 @@ public class Interaction {
                     SumOfNumberOfParticipants sum = new SumOfNumberOfParticipants();
                     sum.print((Collection<MusicBand>) collection);
                     break;
-                case ("count_greater_than_best_album"):
-                    CountGreaterThanBestAlbum countGreaterThanBestAlbum = new CountGreaterThanBestAlbum();
-                    countGreaterThanBestAlbum.invoke(collection, str[1]);
-                    break;
                 case ("print_field_ascending_description"):
                     PrintFieldAscendingDescription printer = new PrintFieldAscendingDescription();
                     printer.invoke(collection);
                     break;
+
+
+
                 default:
-                    System.out.println("Unknown command");
+                    String[] str = CommandsParser.convertLineToArguments(line);
+                    try{
+                        switch(str[0]){
+                            case("update"):
+                                long idToUpdate = Long.valueOf(str[1]).longValue();
+                                UpdateId updater = new UpdateId();
+                                collection = updater.invoke(collection, idToUpdate);
+                                break;
+                            case ("remove_by_id"):
+                                long idToRemove = Long.valueOf(str[1]).longValue();
+                                RemoveById remover = new RemoveById();
+                                collection = remover.invoke(collection, idToRemove);
+                                break;
+                            case("execute_script"):
+                                ExecuteScript scriptExecutor = new ExecuteScript(str[1]);
+                                scriptExecutor.execute(this);
+                                break;
+                            case ("insert_at"):
+                                int index = Integer.valueOf(str[1]).intValue();
+                                InsertAt insertAt = new InsertAt();
+                                collection = insertAt.invoke(collection, index);
+                                break;
+                            case ("remove_greater"):
+                                int indexToRemove = Integer.valueOf(str[1]).intValue();
+                                RemoveGreater removeGreater = new RemoveGreater();
+                                collection = removeGreater.invoke(collection, indexToRemove);
+                                break;
+                            case ("count_greater_than_best_album"):
+                                CountGreaterThanBestAlbum countGreaterThanBestAlbum = new CountGreaterThanBestAlbum();
+                                countGreaterThanBestAlbum.invoke(collection, str[1]);
+                                break;
+                            default:
+                                System.out.println("Unknown command");
+                        }
+                    }catch (Exception e){
+                        System.out.println("Incorrect argument");
+                    }
             }
         }
     }

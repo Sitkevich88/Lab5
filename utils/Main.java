@@ -6,7 +6,7 @@ import java.util.Stack;
 
 /**
  * @author Valerii Sitkevich
- * @version 1.0
+ * @version 1.2
  * @since 2021-03-01
  */
 
@@ -30,7 +30,6 @@ public class Main {
             System.out.println("File path is not detected");
             System.exit(1);
         }
-
 
     }
 }

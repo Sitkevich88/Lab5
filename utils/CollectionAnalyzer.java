@@ -26,11 +26,14 @@ public class CollectionAnalyzer {
      */
     public long findMaxId(){
         long maxId = 0;
-        for (MusicBand band : collection){
-            if (band.getId()>maxId){
-                maxId = band.getId();
+        try{
+            for (MusicBand band : collection){
+                if (band.getId()>maxId){
+                    maxId = band.getId();
+                }
             }
-        }
+        }catch(Exception e){ }
+
         return maxId;
     }
 
@@ -59,12 +62,4 @@ public class CollectionAnalyzer {
     }
 
 
-    /**
-     *
-     * @return Date last initialization
-     */
-    /*
-    public Date getLastInitialization(){
-        return InitializationTracker.getLastInit();
-    }*/
 }

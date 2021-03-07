@@ -30,6 +30,4 @@ Updated Album
 show
 info
 remove_by_id 1
-clear
 info
-exit

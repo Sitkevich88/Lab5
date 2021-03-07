@@ -3,6 +3,7 @@ package utils;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import data.MusicBand;
 import java.io.*;
@@ -56,6 +57,9 @@ public class CollectionSaver {
             System.exit(1);
         } catch (IOException e) {
             System.out.println("There are not enough rights to open this file");
+            System.exit(1);
+        } catch (JsonParseException e){
+            System.out.println("Incorrect json");
             System.exit(1);
         }
 
