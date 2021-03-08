@@ -21,18 +21,22 @@ public class InputChecker {
      * Validates String
      * @param str - String input request
      * @param canBeNull - boolean if input can be null
+     * @param canBeEmpty - boolean if input can be empty
      * @return String correct input
      */
-    public String nextLine(String str, boolean canBeNull){
-        System.out.print(str);
-        String correctString = sc.nextLine();
-        if (!canBeNull) {
-            while (correctString.length()==0){
-                System.out.println("Incorrect input");
-                System.out.print(str);
-                correctString = sc.nextLine();
-            }
+
+    public String nextLine(String str, boolean canBeEmpty, boolean canBeNull){
+
+        String correctString;
+        do {
+            System.out.printf("(String, can%sbe empty, can%sbe null) %s",booleanToString(canBeEmpty), booleanToString(canBeNull), str);
+            correctString = sc.nextLine();
+        }while (!(emptyCheck(canBeEmpty, correctString) && nullCheck(canBeNull, correctString)));
+
+        if (correctString.equals("null")){
+            correctString=null;
         }
+
         return correctString;
     }
 
@@ -49,7 +53,7 @@ public class InputChecker {
 
         while (!correct){
             try {
-                System.out.print(str);
+                System.out.print("(long) " + str);
                 buffer = sc.nextLine();
                 if (buffer.length()==0){
                     throw new InputMismatchException();
@@ -58,7 +62,7 @@ public class InputChecker {
                 }
                 correct=true;
             }catch (InputMismatchException | NumberFormatException e){
-                System.out.println("Incorrect input");
+                System.out.println("Input must be long type");
             }
         }
         return correctLong;
@@ -73,84 +77,28 @@ public class InputChecker {
      */
 
     public Integer nextInt(String str, boolean canBeNull, boolean mustBePositive)  {
-        Integer correctInt = Integer.valueOf(0);
-        boolean correct = false;
-        String buffer;
 
-        if (canBeNull && mustBePositive){
-            while (!correct){
+        Integer correctInt = null;
+        String buffer = null;
+        boolean isInteger;
+        do {
+            isInteger = false;
+            while (!isInteger){
                 try {
-                    System.out.print(str);
+                    System.out.printf("(Integer, can%sbe null, can%sbe <=0) %s",booleanToString(canBeNull), booleanToString(!mustBePositive), str);
                     buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        correctInt=null;
-                        //break;
+                    correctInt = Integer.valueOf(buffer);
+                    isInteger = true;
+                } catch (InputMismatchException | NumberFormatException e) {
+                    if (buffer.equals("null")){
+                        correctInt = null;
+                        isInteger = true;
                     }else{
-                        if (Integer.parseInt(buffer) >0){
-                            correctInt = Integer.valueOf(buffer);
-                        }else {
-                            throw new InputMismatchException();
-                        }
+                        System.out.println("Input must be Integer");
                     }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
                 }
             }
-        }else if (canBeNull){
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        correctInt=null;
-                        //break;
-                    }else{
-                        correctInt = Integer.valueOf(buffer);
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }else if (mustBePositive){
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        throw new InputMismatchException();
-                    }else{
-                        if (Integer.parseInt(buffer) >0){
-                            correctInt = Integer.valueOf(buffer);
-                        }else {
-                            throw new InputMismatchException();
-                        }
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }else{
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        throw new InputMismatchException();
-                    }else{
-                        correctInt = Integer.valueOf(buffer);
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }
-
-
-
+        }while (!(nullCheck(canBeNull, buffer) && positiveCheck(mustBePositive, correctInt)));
         return correctInt;
     }
 
@@ -170,7 +118,7 @@ public class InputChecker {
                 genre = MusicGenre.getEnum(input);
                 correct = true;
             }catch (IllegalArgumentException e){
-                System.out.println("Incorrect input");
+                System.out.println("Incorrect enum");
             }
         }
         return genre;
@@ -195,18 +143,18 @@ public class InputChecker {
                 localDate = LocalDate.of(Integer.valueOf(input[0]).intValue(), Integer.valueOf(input[1]).intValue(), Integer.valueOf(input[2]).intValue());
                 correct = true;
             }catch (Exception e){
-                System.out.println("Incorrect input");
+                System.out.println("Incorrect date");
             }
 
         }
         correct = false;
         while (!correct){
             try {
-                System.out.print("Insert the offset in the format +/- and a number of hours (+3): ");
+                System.out.print("Insert the offset in the format +/- and a number of hours in range[-18, +18] (+3): ");
                 zoneId = ZoneId.of(sc.nextLine());
                 correct = true;
             }catch (Exception e){
-                System.out.println("Incorrect input");
+                System.out.println("Incorrect offset");
             }
         }
         time = ZonedDateTime.of(localDate, localTime,zoneId);
@@ -222,83 +170,106 @@ public class InputChecker {
      */
 
     public Float nextFloat(String str, boolean canBeNull, boolean mustBePositive){
-        Float correctFloat = Float.valueOf(0);
-        boolean correct = false;
-        String buffer;
 
-        if (canBeNull && mustBePositive){
-            while (!correct){
+        Float correctFloat = null;
+        String buffer = null;
+        boolean isFloat;
+        do {
+            isFloat = false;
+            while (!isFloat){
                 try {
-                    System.out.print(str);
+                    System.out.printf("(Float, can%sbe null, can%sbe <=0) %s",booleanToString(canBeNull), booleanToString(!mustBePositive), str);
                     buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        correctFloat=null;
-                        //break;
+                    correctFloat = Float.valueOf(buffer);
+                    isFloat = true;
+                } catch (InputMismatchException | NumberFormatException e) {
+                    if (buffer.equals("null")){
+                        correctFloat = null;
+                        isFloat = true;
                     }else{
-                        if (Float.parseFloat(buffer) >0){
-                            correctFloat = Float.valueOf(buffer);
-                        }else {
-                            throw new InputMismatchException();
-                        }
+                        System.out.println("Input must be Float");
                     }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
                 }
             }
-        }else if (canBeNull){
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        correctFloat=null;
-                        //break;
-                    }else{
-                        correctFloat = Float.valueOf(buffer);
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }else if (mustBePositive){
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        throw new InputMismatchException();
-                    }else{
-                        if (Float.parseFloat(buffer) >0){
-                            correctFloat = Float.valueOf(buffer);
-                        }else {
-                            throw new InputMismatchException();
-                        }
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }else{
-            while (!correct){
-                try {
-                    System.out.print(str);
-                    buffer = sc.nextLine();
-                    if (buffer.length()==0){
-                        throw new InputMismatchException();
-                    }else{
-                        correctFloat = Float.valueOf(buffer);
-                    }
-                    correct = true;
-                }catch (InputMismatchException | NumberFormatException e){
-                    System.out.println("Incorrect input");
-                }
-            }
-        }
-
+        }while (!(nullCheck(canBeNull, buffer) && positiveCheck(mustBePositive, correctFloat)));
         return correctFloat;
     }
 
+    private boolean nullCheck(boolean canBeNull, String input){
+        if (!canBeNull){
+            if (input.equals("null")){
+                System.out.println("Input cannot be null");
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    private boolean emptyCheck(boolean canBeEmpty, String input){
+        if (!canBeEmpty){
+            if (input.length()==0){
+                System.out.println("Input cannot be empty");
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+    private boolean positiveCheck(boolean mustBePositive, Number input){
+        if (mustBePositive && input!=null){
+            switch (input.getClass().getSimpleName()){
+                case ("Byte"):
+                    if (input.byteValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                case ("Double"):
+                    if (input.doubleValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                case ("Float"):
+                    if (input.floatValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                case ("Integer"):
+                    if (input.intValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                case ("Long"):
+                    if (input.longValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                case ("Short"):
+                    if (input.shortValue()<=0){
+                        System.out.println("Input must be positive");
+                        return false;
+                    }
+                    break;
+                default:
+                    System.out.println("Unexpected Number value");
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private String booleanToString(boolean value){
+        if (value){
+            return " ";
+        }else {
+            return "not ";
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package utils;
 
+import commands.with_max_one_argument.Exit;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,7 +25,10 @@ public class CommandsParser {
             try {
                 line = reader.readLine().trim();
             } catch (IOException e) {
-                System.out.println("Unable to raed file");
+                System.out.println("Unable to read file");
+            }catch (NullPointerException e){
+                System.out.println("Exiting the program...");
+                new Exit();
             }
         }else{
             String[] lines = buffer.split("\\r?\\n",2);

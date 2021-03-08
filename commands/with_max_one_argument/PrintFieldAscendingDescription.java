@@ -23,8 +23,10 @@ public class PrintFieldAscendingDescription {
 
             for (MusicBand band : collection){
 
-                if (band.getDescription().length()!=0){
-                    list.add(band.getDescription().toLowerCase());
+                if (band.getDescription()!=null){
+                    if (band.getDescription().length()!=0){
+                        list.add(band.getDescription().toLowerCase());
+                    }
                 }
             }
 

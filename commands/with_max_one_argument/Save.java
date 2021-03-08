@@ -16,7 +16,6 @@ public class Save {
      */
 
     public Save(Collection<?> collection, CollectionSaver collectionSaver) {
-
         collectionSaver.saveCollectionToFile(collection);
     }
 }

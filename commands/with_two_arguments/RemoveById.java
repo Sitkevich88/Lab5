@@ -28,6 +28,7 @@ public class RemoveById {
                 }
             }
         }catch (NullPointerException e){
+            System.out.println("This id does not exist");
             return collection;
         }
 

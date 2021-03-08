@@ -38,7 +38,7 @@ public enum MusicGenre {
      */
     public static MusicGenre getEnum(String value) {
 
-        MusicGenre genre = Arrays.stream(MusicGenre.values()).filter(m -> m.title.equals(value)).findAny().orElse(null);
+        MusicGenre genre = Arrays.stream(MusicGenre.values()).filter(m -> m.title.equals(value.toLowerCase())).findAny().orElse(null);
         if (genre==null){
             throw new IllegalArgumentException();
         }

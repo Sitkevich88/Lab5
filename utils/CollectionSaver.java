@@ -17,7 +17,7 @@ import java.util.Stack;
 public class CollectionSaver {
 
 
-    private final String path;
+    private String path;
 
 
     public CollectionSaver(String path){
@@ -40,7 +40,23 @@ public class CollectionSaver {
     public Collection<MusicBand> saveFileToCollection() {
 
         StringBuilder jsonString = new StringBuilder();
-        File file = new File(path);
+        InputChecker checker = new InputChecker();
+        File file;
+        boolean shouldChangePath;
+        do {
+            shouldChangePath = false;
+            file = new File(path);
+            if (!file.exists()){
+                System.out.println("This file does not exist");
+                shouldChangePath = true;
+            }else if (!file.canRead()){
+                System.out.println("There are no rights to read from this file");
+                shouldChangePath = true;
+            }
+            if (shouldChangePath){
+                path = checker.nextLine("Write new path to the file: ", false, false );
+            }
+        }while(shouldChangePath);
         Stack<MusicBand> collection = null;
 
         try {
@@ -53,7 +69,7 @@ public class CollectionSaver {
             Type listType =  new TypeToken<Stack<MusicBand>>() {}.getType();
             collection = gson.fromJson(jsonString.toString(), listType);
         } catch (FileNotFoundException e) {
-            System.out.println("The file is not found");
+            System.out.println("The file has not been found");
             System.exit(1);
         } catch (IOException e) {
             System.out.println("There are not enough rights to open this file");
@@ -78,6 +94,24 @@ public class CollectionSaver {
         Gson gson = Converters.registerZonedDateTime(new GsonBuilder()).setPrettyPrinting().create();
         String json = gson.toJson(collection);
         BufferedOutputStream outputStream;
+        InputChecker checker = new InputChecker();
+        File file;
+        boolean shouldChangePath;
+        do {
+            shouldChangePath = false;
+            file = new File(path);
+            if (!file.exists()){
+                System.out.println("This file does not exist");
+                shouldChangePath = true;
+            }else if (!file.canWrite()){
+                System.out.println("There are no rights to write in the file");
+                shouldChangePath = true;
+            }
+            if (shouldChangePath){
+                path = checker.nextLine("Write new path to the file: ", false, false );
+            }
+        }while(shouldChangePath);
+
         try {
             outputStream = new BufferedOutputStream(new FileOutputStream(path));
             byte[] buffer = json.getBytes();
@@ -85,7 +119,7 @@ public class CollectionSaver {
             outputStream.flush();
             outputStream.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Source file is not found");
+            System.out.println("Source file has not been found");
         } catch (IOException e){
             System.out.println("Not enough rights");
         }

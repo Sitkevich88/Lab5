@@ -24,8 +24,8 @@ public class InsertAt {
 
         try{
 
-            if (index >= collection.size()){
-                System.out.println("Индекс выходит за рамки коллекции");
+            if (index >= collection.size()||index<0){
+                System.out.println("There is no such index in the collection");
                 return collection;
             }
 
@@ -36,9 +36,9 @@ public class InsertAt {
             list.add(index, band);
 
         }catch (IndexOutOfBoundsException e){
-            System.out.println("Индекс выходит за рамки коллекции");
+            System.out.println("There is no such index in the collection");
         }catch (NullPointerException e){
-            System.out.println("Коллекция пуста");
+            System.out.println("The collection is empty");
         }
         return (Collection<MusicBand>) list;
     }
