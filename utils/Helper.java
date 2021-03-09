@@ -6,7 +6,14 @@ package utils;
  */
 public class Helper {
     /**
-     * Parses a line
+     * Parses a line without trimming it
+     * @return String parsed line
+     */
+    public String nextLineWithNoTrim(){
+        return CommandsParser.parseLineWithNoTrim();
+    }
+    /**
+     * Parses a line and trims it
      * @return String parsed line
      */
     public String nextLine(){

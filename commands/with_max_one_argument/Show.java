@@ -15,7 +15,7 @@ public class Show {
         if (collection!=null){
             System.out.println(collection);
         }else {
-            System.out.println("Коллекция пуста");
+            System.out.println("The collection is empty");
         }
     }
 }

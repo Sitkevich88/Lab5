@@ -12,18 +12,19 @@ import java.io.InputStreamReader;
 
 public class CommandsParser {
 
+    private static String lastScript;
     private static String buffer = "";
 
     /**
      * Parses a line
      * @return String parsed line
      */
-    public static String parseLine(){
+    public static String parseLineWithNoTrim(){
         String line = "";
         if (buffer.length()==0){
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             try {
-                line = reader.readLine().trim();
+                line = reader.readLine();
             } catch (IOException e) {
                 System.out.println("Unable to read file");
             }catch (NullPointerException e){
@@ -32,11 +33,21 @@ public class CommandsParser {
             }
         }else{
             String[] lines = buffer.split("\\r?\\n",2);
-            line = lines[0].trim();
+            line = lines[0];
             buffer = lines[1];
             System.out.println(line);
         }
         return line;
+    }
+
+    public static String parseLine(){
+        try {
+            return parseLineWithNoTrim().trim();
+        }catch (NullPointerException e){
+            System.out.println("Exiting the program...");
+            new Exit();
+            return "";
+        }
     }
 
     /**
@@ -45,7 +56,18 @@ public class CommandsParser {
      */
     public static void loadScript(String script){
         if (script.length()!=0){
-            buffer = script + "\n" + buffer;
+            try {
+                if (script.equals(lastScript)&&buffer.length()!=0){
+                    System.out.println("Recursion detected, script skipped");
+                }else {
+                    lastScript = script;
+                    buffer = script + "\n" + buffer;
+                }
+            }catch (NullPointerException e){
+                lastScript = script;
+                buffer = script + "\n" + buffer;
+            }
+
         }
     }
 

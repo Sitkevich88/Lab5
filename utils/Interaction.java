@@ -98,7 +98,8 @@ public class Interaction {
                         System.out.println("Unknown command");
                 }
             }catch (Exception e){
-                System.out.println("Incorrect argument");
+                //System.out.println("Incorrect argument");
+                e.printStackTrace();
             }
         }
     }

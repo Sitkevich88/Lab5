@@ -31,10 +31,12 @@ public class UpdateId {
 
 
         try {
+            boolean idFound = false;
             for (MusicBand band : collection){
 
                 if (band.getId()==id){
 
+                    idFound = true;
                     String name = checker.nextLine("Insert the name: ", false, false);
                     long x = checker.nextLong("Insert the coordinate x: ");
                     Integer y = checker.nextInt("Insert the coordinate y: ", false,false);
@@ -59,6 +61,9 @@ public class UpdateId {
 
                     break;
                 }
+            }
+            if (!idFound){
+                System.out.println("This id has not be found");
             }
         }catch (NullPointerException e){ }
 

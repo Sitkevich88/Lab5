@@ -29,5 +29,6 @@ Updated Album
 4.999
 show
 info
+execute_script .\\src\\data\\algorithm.txt
 remove_by_id 1
 info

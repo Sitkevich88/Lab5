@@ -3,7 +3,7 @@ package utils;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import data.MusicBand;
 import java.io.*;
@@ -67,15 +67,17 @@ public class CollectionSaver {
             }
             Gson gson = Converters.registerZonedDateTime(new GsonBuilder()).setPrettyPrinting().create();
             Type listType =  new TypeToken<Stack<MusicBand>>() {}.getType();
-            collection = gson.fromJson(jsonString.toString(), listType);
+            try {
+                collection = gson.fromJson(jsonString.toString(), listType);
+            }catch (JsonSyntaxException e){
+                System.out.println("!!!!JsonSyntaxException!!!!");
+                e.printStackTrace();
+            }
         } catch (FileNotFoundException e) {
             System.out.println("The file has not been found");
             System.exit(1);
         } catch (IOException e) {
             System.out.println("There are not enough rights to open this file");
-            System.exit(1);
-        } catch (JsonParseException e){
-            System.out.println("Incorrect json");
             System.exit(1);
         }
 

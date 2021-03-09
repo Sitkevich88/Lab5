@@ -30,7 +30,7 @@ public class InputChecker {
         String correctString;
         do {
             System.out.printf("(String, can%sbe empty, can%sbe null) %s",booleanToString(canBeEmpty), booleanToString(canBeNull), str);
-            correctString = sc.nextLine();
+            correctString = sc.nextLineWithNoTrim();
         }while (!(emptyCheck(canBeEmpty, correctString) && nullCheck(canBeNull, correctString)));
 
         if (correctString.equals("null")){
