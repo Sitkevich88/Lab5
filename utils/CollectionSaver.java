@@ -57,7 +57,10 @@ public class CollectionSaver {
                 path = checker.nextLine("Write new path to the file: ", false, false );
             }
         }while(shouldChangePath);
+
         Stack<MusicBand> collection = null;
+        Gson gson = Converters.registerZonedDateTime(new GsonBuilder()).setPrettyPrinting().create();
+        Type listType =  new TypeToken<Stack<MusicBand>>() {}.getType();
 
         try {
             FileReader fr = new FileReader(file);
@@ -65,20 +68,20 @@ public class CollectionSaver {
             while ((content = fr.read()) != -1) {
                 jsonString.append((char) content);
             }
-            Gson gson = Converters.registerZonedDateTime(new GsonBuilder()).setPrettyPrinting().create();
-            Type listType =  new TypeToken<Stack<MusicBand>>() {}.getType();
-            try {
-                collection = gson.fromJson(jsonString.toString(), listType);
-            }catch (JsonSyntaxException e){
-                System.out.println("!!!!JsonSyntaxException!!!!");
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("The file has not been found");
-            System.exit(1);
+            collection = gson.fromJson(jsonString.toString(), listType);
+
         } catch (IOException e) {
-            System.out.println("There are not enough rights to open this file");
+
+            System.out.println("Unexpected error");
+            e.printStackTrace();
             System.exit(1);
+
+        } catch (JsonSyntaxException e){
+
+            JsonFixer fixer = new JsonFixer();
+            String fixedJson = fixer.fixAll(jsonString.toString());
+            collection = gson.fromJson(fixedJson, listType);
+
         }
 
         CollectionAnalyzer analyzer = new CollectionAnalyzer(collection);

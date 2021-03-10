@@ -74,5 +74,22 @@
       "length": 56,
       "sales": 100.34
     }
+  },
+  {
+    "id": 100000,
+    "name": "\t",
+    "coordinates": {
+      "x": 222222222222222222,
+      "y": 1111111111
+    },
+    "creationDate": "Mar 11, 2021 2:07:49 AM",
+    "description": "",
+    "establishmentDate": "2021-02-02T00:00:00Z",
+    "genre": "POP",
+    "bestAlbum": {
+      "name": "null ",
+      "tracks": 1,
+      "length": 1
+    }
   }
 ]
