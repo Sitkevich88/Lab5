@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import commands.with_max_one_argument.Exit;
 import data.MusicBand;
 import java.io.*;
 import java.lang.reflect.Type;
@@ -41,21 +42,28 @@ public class CollectionSaver {
 
         StringBuilder jsonString = new StringBuilder();
         InputChecker checker = new InputChecker();
-        File file;
+        File file = null;
         boolean shouldChangePath;
         do {
             shouldChangePath = false;
-            file = new File(path);
-            if (!file.exists()){
-                System.out.println("This file does not exist");
-                shouldChangePath = true;
-            }else if (!file.canRead()){
-                System.out.println("There are no rights to read from this file");
-                shouldChangePath = true;
+            try{
+                file = new File(path);
+                if (!file.exists()){
+                    System.out.println("This file does not exist");
+                    shouldChangePath = true;
+                }else if (!file.canRead()){
+                    System.out.println("There are no rights to read from this file");
+                    shouldChangePath = true;
+                }
+                if (shouldChangePath){
+                    path = checker.nextLine("Write new path to the file: ", false, false );
+                }
+            }catch (NullPointerException e){
+                System.out.println("Exiting the program...");
+                new Exit();
             }
-            if (shouldChangePath){
-                path = checker.nextLine("Write new path to the file: ", false, false );
-            }
+
+
         }while(shouldChangePath);
 
         Stack<MusicBand> collection = null;
@@ -77,11 +85,13 @@ public class CollectionSaver {
             System.exit(1);
 
         } catch (JsonSyntaxException e){
-
-            JsonFixer fixer = new JsonFixer();
-            String fixedJson = fixer.fixAll(jsonString.toString());
-            collection = gson.fromJson(fixedJson, listType);
-
+            try{
+                JsonFixer fixer = new JsonFixer();
+                String fixedJson = fixer.fixAll(jsonString.toString());
+                collection = gson.fromJson(fixedJson, listType);
+            }catch (JsonSyntaxException e1){
+                System.out.println("Unfixable json syntax exception occurred");
+            }
         }
 
         CollectionAnalyzer analyzer = new CollectionAnalyzer(collection);

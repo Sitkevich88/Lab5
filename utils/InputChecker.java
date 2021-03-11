@@ -197,10 +197,15 @@ public class InputChecker {
 
     private boolean nullCheck(boolean canBeNull, String input){
         if (!canBeNull){
-            if (input.equals("null")){
-                System.out.println("Input cannot be null");
-                return false;
+            try{
+                if (input.equals("null")){
+                    System.out.println("Input cannot be null");
+                    return false;
+                }
+            }catch (NullPointerException e){
+
             }
+
         }
         return true;
     }
@@ -208,10 +213,12 @@ public class InputChecker {
 
     private boolean emptyCheck(boolean canBeEmpty, String input){
         if (!canBeEmpty){
+
             if (input.length()==0){
                 System.out.println("Input cannot be empty");
                 return false;
             }
+
         }
         return true;
     }
